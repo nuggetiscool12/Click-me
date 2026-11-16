@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Click Me +1 Floating Icon Button</title>
+  <style>
+    body {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      margin: 0;
+      background-color: #f4f6f9;
+      font-family: system-ui, -apple-system, sans-serif;
+    }
+
+    /* Button Styling */
+    .click-btn {
+      position: relative;
+      padding: 14px 28px;
+      font-size: 18px;
+      font-weight: 600;
+      color: #ffffff;
+      background-color: #4f46e5;
+      border: none;
+      border-radius: 10px;
+      cursor: pointer;
+      box-shadow: 0 4px 12px rgba(79, 70, 229, 0.3);
+      transition: transform 0.1s ease, background-color 0.2s ease;
+      user-select: none;
+    }
+
+    .click-btn:hover {
+      background-color: #4338ca;
+    }
+
+    .click-btn:active {
+      transform: scale(0.95);
+    }
+
+    /* Floating +1 Icon Styling */
+    .floating-plus {
+      position: fixed;
+      pointer-events: none;
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      font-size: 16px;
+      font-weight: 700;
+      color: #4f46e5;
+      background: #ffffff;
+      padding: 4px 8px;
+      border-radius: 999px;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.12);
+      animation: floatUp 0.9s ease-out forwards;
+      z-index: 1000;
+    }
+
+    /* Animation for floating upward and fading */
+    @keyframes floatUp {
+      0% {
+        opacity: 1;
+        transform: translate(-50%, 0) scale(0.8);
+      }
+      50% {
+        opacity: 1;
+        transform: translate(-50%, -35px) scale(1.1);
+      }
+      100% {
+        opacity: 0;
+        transform: translate(-50%, -65px) scale(1);
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <button class="click-btn" id="clickBtn">Click me</button>
+
+  <script>
+    const button = document.getElementById('clickBtn');
+
+    button.addEventListener('click', (event) => {
+      // Create the floating +1 badge element
+      const badge = document.createElement('div');
+      badge.classList.add('floating-plus');
+
+      // Add a small star SVG icon alongside "+1"
+      badge.innerHTML = `
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="#f59e0b" xmlns="http://w3.org">
+          <path d="M12 2L15.09 8.26L22 9.27L17 14.14L18.18 21.02L12 17.77L5.82 21.02L7 14.14L2 9.27L8.91 8.26L12 2Z"/>
+        </svg>
+        <span>+1</span>
+      `;
+
+      // Position near the cursor with slight horizontal randomness
+      const randomOffset = (Math.random() - 0.5) * 30;
+      const x = event.clientX ? event.clientX + randomOffset : button.getBoundingClientRect().left + button.offsetWidth / 2;
+      const y = event.clientY ? event.clientY - 15 : button.getBoundingClientRect().top;
+
+      badge.style.left = `${x}px`;
+      badge.style.top = `${y}px`;
+
+      document.body.appendChild(badge);
+
+      // Clean up the element once the animation ends
+      badge.addEventListener('animationend', () => {
+        badge.remove();
+      });
+    });
+  </script>
+
+</body>
+</html>
